@@ -46,3 +46,4 @@ app.*.map.json
 
 # test code
 lib/ticket_booking.dart
+assets/

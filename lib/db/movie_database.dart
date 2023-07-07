@@ -1,117 +1,161 @@
-import 'dart:convert';
-
 import 'dart:io';
 
-import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:flutter/material.dart';
+
+
+import 'package:child_movie/db/movie.dart';
 
 
 // ['aplcName', 'coreHarmRsn', 'descriptive_content', 'direName', 'direNatnlName', 'gradeName', 'leadaName', 'mvAssoName', 'oriTitle', 'prodYear', 'prodcName', 'prodcNatnlName', 'rtDate', 'rtNo', 'rtStdName1', 'rtStdName2', 'rtStdName3', 'rtStdName4', 'rtStdName5', 'rtStdName6', 'rtStdName7', 'screTime', 'stadCont', 'suppaName', 'useTitle', 'workCont', 'rtCoreHarmRsnNm']
 // 27개
 
-
+const String DB_FILE_NAME = 'movies.db';
+const String TABLE_NAME = 'movies';
 const String CREATE_TABLE_QUERY = '''
-      CREATE TABLE IF NOT EXISTS movies2 (
+      CREATE TABLE IF NOT EXISTS $TABLE_NAME (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      direName TEXT,
+      aplcName TEXT,
       coreHarmRsn TEXT,
       descriptive_content TEXT,
-      prodcNatnlName TEXT,
-      useTitle TEXT,
-      suppaName TEXT,
-      prodcName TEXT,
+      direName TEXT,
       direNatnlName TEXT,
-      rtNo TEXT,
-      rtDate TEXT,
-      screTime TEXT,
-      rtStdName4 TEXT,
-      rtStdName5 TEXT,
       gradeName TEXT,
-      rtStdName6 TEXT,
       leadaName TEXT,
-      rtStdName7 TEXT,
       mvAssoName TEXT,
-      workCont TEXT,
+      oriTitle TEXT,
       prodYear TEXT,
+      prodcName TEXT,
+      prodcNatnlName TEXT,
+      rtCoreHarmRsnNm TEXT,
+      rtDate TEXT,
+      rtNo TEXT,
       rtStdName1 TEXT,
       rtStdName2 TEXT,
       rtStdName3 TEXT,
-      oriTitle TEXT,
+      rtStdName4 TEXT,
+      rtStdName5 TEXT,
+      rtStdName6 TEXT,
+      rtStdName7 TEXT,
+      screTime TEXT,
       stadCont TEXT,
-      aplcName TEXT,
-      rtCoreHarmRsnNm TEXT
+      suppaName TEXT,
+      useTitle TEXT,
+      workCont TEXT
       )
     ''';
 
-class MovieDatabase{
 
-  Future p() async{
-    final databasePath = await getDatabasesPath();
-    print( databasePath );
-  }
+class MovieDatabase{
+  late Database db;
+
+
   Future openDB() async{
     final databasePath = await getDatabasesPath();
-    String path = join(databasePath, 'movie_db.db');
-    Database database = await openDatabase(
+    String path = join(databasePath, DB_FILE_NAME);
+    var exists = await databaseExists(path);
+
+    if (!exists) {
+      print("Creating $DB_FILE_NAME from asset");
+
+      try {
+        await Directory(dirname(path)).create(recursive: true);
+      } catch (_) {}
+
+      ByteData data = await rootBundle.load(join("assets", DB_FILE_NAME));
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      await File(path).writeAsBytes(bytes, flush: true);
+
+      print('Created!');
+    }
+
+    db = await openDatabase(
       path,
       version: 1,
       onConfigure: (Database db) => {},
-      onCreate: _onCreate,
-      onUpgrade: _onUpgrade,
-    );
-  }
-
-  Future openDBFromJson() async{
-    final databasePath = await getDatabasesPath();
-    String path = join(databasePath, 'movie_db.db');
-    Database database = await openDatabase(
-      path,
-      version: 1,
-      onConfigure: (Database db) => {},
-      onCreate: _onCreateFromJson,
+      onCreate: (Database db, int version) => {},
       onUpgrade: _onUpgrade,
     );
 
-  }
-
-
-  Future _onCreate(Database db, int version) async {
-    await db.execute(CREATE_TABLE_QUERY);
-  }
-
-  Future _onCreateFromJson(Database db, int version) async {
-    await db.execute(CREATE_TABLE_QUERY);
-    print('b');
-    String jsonString = await rootBundle.loadString('assets/movies.json');
-    Map<String, dynamic> jsonData = json.decode(jsonString);
-    jsonData.keys.toList().forEach((key) async {
-      print('a');
-      await db.insert('movies2', jsonData[key],conflictAlgorithm: ConflictAlgorithm.replace,);
-    });
+    print('Opened!');
 
   }
+
+
+
+  // Future _onCreate(Database db, int version) async {
+  //
+  //   await db.execute(CREATE_TABLE_QUERY);
+  //
+  //   final databasePath = await getDatabasesPath();
+  //   String path = join(databasePath, DB_FILE_NAME);
+  //
+  //   var exists = await databaseExists(path);
+  //
+  //   if (!exists) {
+  //     print("Creating $DB_FILE_NAME from asset");
+  //     try {
+  //       await Directory(dirname(path)).create(recursive: true);
+  //     } catch (_) {}
+  //   }
+  //
+  //   ByteData data = await rootBundle.load(join("assets", DB_FILE_NAME));
+  //   List<int> bytes =
+  //   data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  //   await File(path).writeAsBytes(bytes, flush: true);
+  //
+  //   print('create done');
+  // }
+  //
+  // Future _onCreateFromJson(Database db, int version) async {
+  //   await db.execute(CREATE_TABLE_QUERY);
+  //
+  //   String jsonString = await rootBundle.loadString('assets/movies.json');
+  //
+  //   Map<String, dynamic> jsonData = json.decode(jsonString);
+  //
+  //   jsonData.keys.toList().forEach((key) async {
+  //     await db.insert(TABLE_NAME, jsonData[key],conflictAlgorithm: ConflictAlgorithm.replace,);
+  //   });
+  // }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-  // 나중에 만들거임
+    // 나중에 만들거임
   }
 
-  Future add(item) async{
-    final db = await openDB();
+  Future<Movie> insert(Movie movie) async{
+    await db.insert(TABLE_NAME, movie.toJson(),conflictAlgorithm: ConflictAlgorithm.replace,);
 
+    return movie;
   }
 
-  Future delete() async{
+  Future<List<Movie>> getMovieFromTitle(String word) async{
+    List<Movie> searchResult = [];
+
+    // List<Map<String, dynamic>> maps = await db.query(
+    //   TABLE_NAME,
+    //   columns: ['id', 'aplcName', 'coreHarmRsn', 'descriptive_content', 'direName', 'direNatnlName', 'gradeName', 'leadaName', 'mvAssoName', 'oriTitle', 'prodYear', 'prodcName', 'prodcNatnlName', 'rtDate', 'rtNo', 'rtStdName1', 'rtStdName2', 'rtStdName3', 'rtStdName4', 'rtStdName5', 'rtStdName6', 'rtStdName7', 'screTime', 'stadCont', 'suppaName', 'useTitle', 'workCont', 'rtCoreHarmRsnNm'],
+    //   where: 'oriTitle LIKE ? OR useTitle LIKE ?',
+    //   whereArgs: ['%$word%'],
+    // );
+    List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM $TABLE_NAME WHERE oriTitle LIKE \'%$word%\' OR useTitle LIKE \'%$word%\'');
+
+    for (int i = 0; i < maps.length; i++) {
+      searchResult.add(Movie.fromJson(maps[i]));
+    }
+
+    print(maps.length);
+
+    return searchResult;
+  }
+
+
+  Future deleteDB() async{
     final databasePath = await getDatabasesPath();
-    String path = join(databasePath, 'movie_db.db');
-    databaseFactory.deleteDatabase(path);
-    print('delete');
-  }
-
-  Future test() async{
-
+    String path = join(databasePath, DB_FILE_NAME);
+    await databaseFactory.deleteDatabase(path);
+    print('done');
   }
 
 }

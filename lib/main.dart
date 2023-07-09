@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'first_run_screen.dart';
-import 'ticket_booking.dart';
+import 'pages/home_page.dart';
 
-import 'dart:convert';
-import 'package:flutter/services.dart';
-
+import 'pages/detail_search_page.dart';
+import 'pages/search_page.dart';
+import 'pages/movie_rating_info.dart';
+import 'pages/update_page.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +17,7 @@ void main() async{
       home: FirstRunScreen(),
     ));
   } else {
-    runApp(const MaterialApp(
-      home: MyApp(),
-    ));
+    runApp(MyApp());
   }
 }
 
@@ -29,64 +28,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green[900]!),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        title: '아이의 영화',
+        debugShowCheckedModeBanner: false,
+        initialRoute:'/',
+        routes: {
+          '/': (context) => HomePage(),
+          '/search': (context) => SearchPage(),
+          '/detail_search': (context) => DetailSearchPage(),
+          '/rating_info': (context) => MovieRatingInfoPage(),
+          '/update': (context) => UpdatePage(),
+        }
+        );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-  void OpenAppInfo() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => DoctorsInfo()));
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: OpenAppInfo,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}

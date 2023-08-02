@@ -5,31 +5,31 @@ Widget getRatingImage(String? gradeName,
   switch (gradeName) {
     case '전체관람가':
       return Image.asset(
-        'assets/age_rating/all.png',
+        'assets/age_rating_image/all.png',
         width: width,
         height: height,
       );
     case '12세이상관람가':
       return Image.asset(
-        'assets/age_rating/12.png',
+        'assets/age_rating_image/12.png',
         width: width,
         height: height,
       );
     case '15세이상관람가':
       return Image.asset(
-        'assets/age_rating/15.png',
+        'assets/age_rating_image/15.png',
         width: width,
         height: height,
       );
     case '청소년관람불가':
       return Image.asset(
-        'assets/age_rating/18.png',
+        'assets/age_rating_image/18.png',
         width: width,
         height: height,
       );
     case '제한관람가':
       return Image.asset(
-        'assets/age_rating/w.png',
+        'assets/age_rating_image/w.png',
         width: width,
         height: height,
       );
@@ -53,49 +53,49 @@ List<Widget> getCoreHarmImageList(String? coreHarmRsn, String? rtCoreHarmRsnNm,
     switch (sp) {
       case '주제':
         coreHarmImageList.add(Image.asset(
-          'assets/contents_rating/1. 주제.png',
+          'assets/contents_rating_image/1. 주제.png',
           width: width,
           height: height,
         ));
       case '주제 및 내용':
         coreHarmImageList.add(Image.asset(
-          'assets/contents_rating/1. 주제.png',
+          'assets/contents_rating_image/1. 주제.png',
           width: width,
           height: height,
         ));
       case '선정성':
         coreHarmImageList.add(Image.asset(
-          'assets/contents_rating/2. 선정성.png',
+          'assets/contents_rating_image/2. 선정성.png',
           width: width,
           height: height,
         ));
       case '폭력성':
         coreHarmImageList.add(Image.asset(
-          'assets/contents_rating/3. 폭력성.png',
+          'assets/contents_rating_image/3. 폭력성.png',
           width: width,
           height: height,
         ));
       case '공포':
         coreHarmImageList.add(Image.asset(
-          'assets/contents_rating/4. 공포.png',
+          'assets/contents_rating_image/4. 공포.png',
           width: width,
           height: height,
         ));
       case '약물':
         coreHarmImageList.add(Image.asset(
-          'assets/contents_rating/5. 약물.png',
+          'assets/contents_rating_image/5. 약물.png',
           width: width,
           height: height,
         ));
       case '대사':
         coreHarmImageList.add(Image.asset(
-          'assets/contents_rating/6. 대사.png',
+          'assets/contents_rating_image/6. 대사.png',
           width: width,
           height: height,
         ));
       case '모방위험':
         coreHarmImageList.add(Image.asset(
-          'assets/contents_rating/7. 모방위험.png',
+          'assets/contents_rating_image/7. 모방위험.png',
           width: width,
           height: height,
         ));

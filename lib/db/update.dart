@@ -24,6 +24,16 @@ Future<void> setLastUpdatedDate(int year, int month) async {
   return;
 }
 
+/// Firebase의 가장 최근 업데이트 날짜를 계산
+/// 매달 5일에 데이터가 추가되므로 5일기준으로 계산
+DateTime getUpdateDate() {
+  DateTime now = DateTime.now();
+  DateTime updateDate = now.day > 5
+      ? DateTime(now.year, now.month - 1)
+      : DateTime(now.year, now.month - 2);
+  return updateDate;
+}
+
 /// Firestore에서 영화 데이터들을 가져옴
 ///
 /// DateTime 값을 인자로 받고, 년-월(ex 2023-07)에 해당하는 컬렉션에서 영화정보들을 가져옴
@@ -51,12 +61,8 @@ Future<int> updateMovieInfo() async {
   List<Future<List<Movie>>> futures = [];
   int movieCount = 0;
   DateTime lastUpdatedDate = await getLastUpdatedDate(); // year, month
-  DateTime now = DateTime.now();
 
-  // 매월 5일에 데이터 추가하니까 5일 기준
-  DateTime updateDate = now.day > 5
-      ? DateTime(now.year, now.month - 1)
-      : DateTime(now.year, now.month - 2);
+  DateTime updateDate = getUpdateDate();
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 

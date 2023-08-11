@@ -124,7 +124,7 @@ class MovieDatabase{
     // 나중에 만들거임
   }
 
-  Future<Movie> insert(Movie movie) async{
+  Future<Movie> insertMovie(Movie movie) async{
     await db.insert(TABLE_NAME, movie.toJson(),conflictAlgorithm: ConflictAlgorithm.replace,);
 
     return movie;

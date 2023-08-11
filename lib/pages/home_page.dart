@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List options = [
     {
-      'name': '검색',
+      'name': '영화 검색',
       'icon': Icon(
         Icons.search,
         size: 70.0.h,
@@ -49,9 +49,8 @@ class _HomePageState extends State<HomePage> {
     },
   ];
 
-  Color _color = Colors.green;
 
-  Widget optionBox(Map<String, dynamic> option) {
+  Widget optionBox(Map<String, dynamic> option, Color color) {
     return GestureDetector(
       onTap: () {
         setState(() {});
@@ -59,10 +58,17 @@ class _HomePageState extends State<HomePage> {
       },
       child: Container(
         // width: 40,
-        // height: 40,
+        height: 40,
         decoration: BoxDecoration(
-          color: _color,
+          color: color,
           borderRadius: BorderRadius.circular(15.0),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 7,
+                blurRadius: 10,
+                offset: Offset(0, 10)),
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -70,10 +76,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             option['icon'],
             SizedBox(
-              height: 10.0.h,
+              height: 20.0.h,
             ),
             Text(
-              option['name']!,
+              option['name'],
               textAlign: TextAlign.center,
               style: TextStyle(
                   //fontFamily: 'normal',
@@ -90,115 +96,103 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    double heightFromWhiteBg = 1000.h - kToolbarHeight;
-    return Container(
-      height: size.height - kToolbarHeight,
-      color: Color(0xffFEEBB6),
-      child: Stack(
+    return Scaffold(
+      backgroundColor: Color(0xffFEEBB6),
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          //iconTheme: const IconThemeData(color: Colors.red),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.grey,
+              ),
+              iconSize: 40,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Setting(),
+                  ),
+                );
+              },
+            )
+          ]),
+      body: Column(
         children: [
-          Positioned(
-            top: 50.h,
+          SizedBox(
+            height: 20.0.h,
+          ),
+          Text(
+            "안녕하세요 사용자님!",
+            style: TextStyle(
+              decoration: TextDecoration.none,
+              color: Color(0xff2f5d62).withOpacity(0.77),
+              fontSize: 30.0.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            height: 10.0.h,
+          ),
+          Text(
+            "사용하실 기능을 선택해주세요",
+            style: TextStyle(
+              //fontFamily: 'normal',
+              decoration: TextDecoration.none,
+              color: Color(0xff2f5d62),
+              fontSize: 40.0.sp,
+              fontWeight: FontWeight.bold,
+              height: 1.2.h,
+            ),
+          ),
+          SizedBox(
+            height: 100.h,
+          ),
+          Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-              color: Color(0xffFEEBB6),
-              width: size.width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Setting(),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40.0),
+                    topRight: Radius.circular(40.0),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 540.h,
+                      child: GridView(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 24.0.w, vertical: 24.0.h),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 24.0.h,
+                            mainAxisSpacing: 24.0.h,
                           ),
-                        );
-                      },
-                      child: Icon(
-                        Icons.settings,
-                        size: 40.0.h,
-                        color: Colors.black,
+                          children: <Widget>[
+                            optionBox(options[0], Colors.green.shade300),
+                            optionBox(options[1], Colors.yellow.shade300),
+                            optionBox(options[2], Colors.orange.shade300),
+                            optionBox(options[3], Colors.red.shade300),
+                          ]),
+                    ),
+                    Flexible(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Image.asset(
+                          'assets/age_rating_image/sum.png',
+                          width: 150.w,
+                          height: 150.h,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20.0.h,
-                  ),
-                  Text(
-                    "안녕하세요 사용자님",
-                    style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: Color(0xff2f5d62).withOpacity(0.77),
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10.0.h,
-                  ),
-                  Text(
-                    "사용하실 기능을\n선택해주세요",
-                    style: TextStyle(
-                      //fontFamily: 'normal',
-                      decoration: TextDecoration.none,
-                      color: Color(0xff2f5d62),
-                      fontSize: 40.0.sp,
-                      fontWeight: FontWeight.bold,
-                      height: 1.2.h,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                  ],
+                )),
           ),
-          Positioned(
-            top: 300.0.h,
-            width: size.width,
-            child: Container(
-              height: heightFromWhiteBg,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40.0),
-                  topRight: Radius.circular(40.0),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-              top: 300.0.h,
-              height: heightFromWhiteBg,
-              width: size.width,
-              child: GridView(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 24.0.h, vertical: 24.0.h),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.2.h,
-                    crossAxisSpacing: 24.0.h,
-                    mainAxisSpacing: 24.0.h,
-                  ),
-                  children: <Widget>[
-                    optionBox(options[0]),
-                    optionBox(options[1]),
-                    optionBox(options[2]),
-                    optionBox(options[3]),
-                  ])),
-          Positioned(
-              bottom: 24.h,
-              left: 195.w,
-              child: Container(
-                alignment: Alignment.topCenter,
-                child: Image.asset(
-                  'assets/age_rating/sum.png',
-                  width: 150.w,
-                  height: 150.h,
-                ),
-              ))
         ],
       ),
     );

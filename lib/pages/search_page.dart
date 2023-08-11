@@ -12,6 +12,11 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   List<Widget> searchResult = [];
+
+  // 검색창의 상태를 나타내는 숫자
+  // -1 : 검색 중, 0 : 결과X, 자연수 : 결과O
+  // 검색 중일 때를 제외하면 이 값은 검색된 데이터의 수와 일치함
+  int resultState = 0;
   TextEditingController inputController = TextEditingController();
 
   late MovieDatabase db;
@@ -23,8 +28,55 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
   }
 
+  // 검색 결과 위젯
+
+
   @override
   Widget build(BuildContext context) {
+    Widget resultWidget(int state){
+      switch (state){
+      // 검색 중일 때
+        case -1:
+          return Center(child: CircularProgressIndicator(),);
+      // 결과가 없을 때
+        case 0:
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.search,
+                size: 100.h,
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  '검색 결과가 없습니다.',
+                  style: TextStyle(
+                    fontSize: 30.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          );
+      // 결과가 있을 때
+        default:
+          // return ListView.builder(
+          //     itemCount: searchResult.length,
+          //     itemBuilder: (BuildContext context, int index){
+          //       return Container(
+          //         child: searchResult[index],
+          //       );
+          //     }
+          // );
+        return ListView(
+          children: searchResult,
+        );
+      }
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -74,10 +126,15 @@ class _SearchPageState extends State<SearchPage> {
                   Expanded(
                     child: TextField(
                       onSubmitted: (v) async {
+                        setState(() {
+                          resultState = -1;
+                        });
+
                         var data = await db.getMovieFromTitle(v);
 
                         setState(() {
                           searchResult = makePreviewWidgets(data, context);
+                          resultState = searchResult.length;
                         });
                       },
                       controller: inputController,
@@ -107,32 +164,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
             SizedBox(height: 30.h),
             Expanded(
-              child: (searchResult.length > 0)
-                  ? ListView(
-                      children: searchResult,
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.search,
-                          size: 100.h,
-                        ),
-                        SizedBox(
-                          height: 20.h,
-                        ),
-                        Align(
-                          child: Text(
-                            '검색 결과가 없습니다.',
-                            style: TextStyle(
-                              fontSize: 30.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                        ),
-                      ],
-                    ),
+              child: resultWidget(resultState)
             ),
           ],
         ),

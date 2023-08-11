@@ -14,11 +14,17 @@ class _SearchPageState extends State<SearchPage> {
   List<Widget> searchResult = [];
   TextEditingController inputController = TextEditingController();
 
-  MovieDatabase db = MovieDatabase();
+  late MovieDatabase db;
+
+  @override
+  void initState() {
+    db = MovieDatabase();
+    db.openDB();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    db.openDB();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

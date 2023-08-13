@@ -21,12 +21,10 @@ List<Widget> makePreviewWidgets(List<Movie> movies, BuildContext context) {
             ),
           );
         },
-        child: Card(
-          child: ListTile(
-            leading: getRatingImage(movie.gradeName, width: 50.w, height: 50.h),
-            title: Text(movie.useTitle!),
-            subtitle: Text(movie.oriTitle!),
-          ),
+        child: ListTile(
+          leading: getRatingImage(movie.gradeName, width: 50.w, height: 50.h),
+          title: Text(movie.useTitle!),
+          subtitle: Text(movie.oriTitle!),
         )));
   }
   return items;

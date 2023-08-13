@@ -98,6 +98,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffFEEBB6),
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,

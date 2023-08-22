@@ -4,6 +4,7 @@ import 'package:child_movie/pages/update_loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:child_movie/db/update.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class UpdatePage extends StatefulWidget {
   const UpdatePage({super.key});
@@ -25,7 +26,7 @@ class _UpdatePageState extends State<UpdatePage> {
     timer = Timer.periodic(const Duration(seconds: 2), (t) {
       setState(() {
         align =
-            align == Alignment.center ? Alignment.topCenter : Alignment.center;
+        align == Alignment.center ? Alignment.topCenter : Alignment.center;
         curve = curve == Curves.bounceOut ? Curves.linear : Curves.bounceOut;
       });
     });
@@ -37,6 +38,14 @@ class _UpdatePageState extends State<UpdatePage> {
   void dispose() {
     timer.cancel(); // timer 해제
     super.dispose();
+  }
+
+  isInternetConnected() async{
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none){
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -112,13 +121,13 @@ class _UpdatePageState extends State<UpdatePage> {
                     height: 20.h,
                   ),
                   Text(
-                    '업데이트가 완료되었습니다.\n추가된 영화 데이터 : $num개',
-                    style: TextStyle(
-                      decoration: TextDecoration.none,
-                      fontSize: 20.0.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center
+                      '업데이트가 완료되었습니다.\n추가된 영화 데이터 : $num개',
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontSize: 20.0.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center
                   ),
                   SizedBox(
                     height: 20.h,
@@ -152,14 +161,66 @@ class _UpdatePageState extends State<UpdatePage> {
       );
     }
 
+    /// 인터넷 연결이 되어있지 않으면 호출되는 dialog
+    internetConnectionErrorDialog() {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            content: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Icon(
+                    Icons.public_off,
+                    size: 70.0.h,
+                    color: Colors.red,
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Text(
+                      '인터넷이 연결되어 있지 않습니다\n인터넷 연결을 확인해주세요',
+                      style: TextStyle(
+                        decoration: TextDecoration.none,
+                        fontSize: 20.0.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center
+
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        fixedSize: Size(300.w, 40.h),
+                        backgroundColor: Colors.blue),
+                    child: const Text('닫기'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
-        image: AssetImage(
-          'assets/age_rating_image/b.jpg',
-        ),
-        fit: BoxFit.cover,
-      )),
+            image: AssetImage(
+              'assets/age_rating_image/9.jpg',
+            ),
+            fit: BoxFit.cover,
+          )),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -202,7 +263,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     child = CircularProgressIndicator();
                   } else {
                     isLasted =
-                        updateDate.compareTo(snapshot.data) == 0 ? true : false;
+                    updateDate.compareTo(snapshot.data) == 0 ? true : false;
 
                     child = Column(
                       children: [
@@ -281,6 +342,7 @@ class _UpdatePageState extends State<UpdatePage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              SizedBox(height: 24.h,),
                               Text(
                                 "최신 업데이트 : ${updateDate.year}-${updateDate.month.toString().padLeft(2, '0')}",
                                 style: TextStyle(
@@ -289,14 +351,14 @@ class _UpdatePageState extends State<UpdatePage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text(
-                                "앱 버전 : Version 0.0.1",
-                                style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontSize: 30.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                              // Text(
+                              //   "앱 버전 : ${SettingManager.prefs.getString('version')}",
+                              //   style: TextStyle(
+                              //     decoration: TextDecoration.none,
+                              //     fontSize: 30.0.sp,
+                              //     fontWeight: FontWeight.bold,
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -314,15 +376,20 @@ class _UpdatePageState extends State<UpdatePage> {
                 }
                 // 업데이트 진행
                 else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const UpdateLoadingPage()),
-                  );
-                  var downloadedDataNum = await updateMovieInfo();
+                  if (!(await isInternetConnected())){
+                    internetConnectionErrorDialog();
+                  }
+                  else{
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UpdateLoadingPage()),
+                    );
+                    var downloadedDataNum = await updateMovieInfo();
 
-                  Navigator.pop(context);
-                  doneDialog(downloadedDataNum);
+                    Navigator.pop(context);
+                    doneDialog(downloadedDataNum);
+                  }
                 }
               },
               style: ElevatedButton.styleFrom(

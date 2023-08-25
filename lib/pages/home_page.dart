@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:child_movie/setting/setting_pages/setting_page.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -94,127 +96,204 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            Colors.green.shade100,
-            Colors.yellow.shade100,
-            Colors.orange.shade100,
-            Colors.red.shade100,
-            //Color(0xffFEEBB6),
-            //Colors.white
-          ], stops: [
-            0.25,
-            0.5,
-            0.75,
-            1
-          ],
+   exitDialog() {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0)),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
 
-
-          ),
-
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            //iconTheme: const IconThemeData(color: Colors.red),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.grey,
+                // AdWidget로 변경예정
+                Lottie.asset(
+                    'assets/age_rating_image/ads.json',
+                  height: 500.h,
+                  width: 500.w,
                 ),
-                iconSize: 40,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SettingPage(),
-                    ),
-                  );
-                },
-              )
-            ]),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 20.0.h,
-            ),
-            Text(
-              "안녕하세요 사용자님!",
-              style: TextStyle(
-                decoration: TextDecoration.none,
-                color: Color(0xff2f5d62).withOpacity(0.77),
-                fontSize: 30.0.sp,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 10.0.h,
-            ),
-            Text(
-              "사용하실 기능을 선택해주세요",
-              style: TextStyle(
-                //fontFamily: 'normal',
-                decoration: TextDecoration.none,
-                color: Color(0xff2f5d62),
-                fontSize: 40.0.sp,
-                fontWeight: FontWeight.bold,
-                height: 1.2.h,
-              ),
-            ),
-            SizedBox(
-              height: 100.h,
-            ),
-            Expanded(
-              child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40.0),
-                      topRight: Radius.circular(40.0),
-                    ),
+                SizedBox(height: 30.h,),
+                Text(
+                  '앱을 종료하시겠습니까?',
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    fontSize: 20.0.sp,
+                    fontWeight: FontWeight.bold,
                   ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 540.h,
-                        child: GridView(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24.0.w, vertical: 24.0.h),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 1,
-                              crossAxisSpacing: 24.0.h,
-                              mainAxisSpacing: 24.0.h,
-                            ),
-                            children: <Widget>[
-                              optionBox(options[0], Colors.green.shade300),
-                              optionBox(options[1], Colors.yellow.shade300),
-                              optionBox(options[2], Colors.orange.shade300),
-                              optionBox(options[3], Colors.red.shade300),
-                            ]),
-                      ),
-                      Flexible(
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Image.asset(
-                            'assets/age_rating_image/sum.png',
-                            width: 150.w,
-                            height: 150.h,
-                          ),
+                ),
+                SizedBox(height: 30.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 60.h,
+                        //width: 175.w,
+                        child: OutlinedButton(
+                          child: const Text('취소'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
                       ),
-                    ],
-                  )),
+                    ),
+                    SizedBox(width: 20.w,),
+                    Expanded(
+                      child: SizedBox(
+                        height: 60.h,
+                        //width: 175.w,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0)),
+                              backgroundColor: Colors.blue),
+                          child: const Text('종료'),
+                          onPressed: () {
+                            SystemNavigator.pop(animated: true);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-          ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 뒤로가기 버튼을 누르면 exitDialog() 실행
+    return WillPopScope(
+      onWillPop: () async{
+        return exitDialog();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Colors.green.shade100,
+              Colors.yellow.shade100,
+              Colors.orange.shade100,
+              Colors.red.shade100,
+              //Color(0xffFEEBB6),
+              //Colors.white
+            ], stops: [
+              0.25,
+              0.5,
+              0.75,
+              1
+            ],
+
+
+            ),
+
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0.0,
+              //iconTheme: const IconThemeData(color: Colors.red),
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.settings,
+                    color: Colors.grey,
+                  ),
+                  iconSize: 40,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingPage(),
+                      ),
+                    );
+                  },
+                )
+              ]),
+          body: Column(
+            children: [
+              SizedBox(
+                height: 20.0.h,
+              ),
+              Text(
+                "안녕하세요 사용자님!",
+                style: TextStyle(
+                  decoration: TextDecoration.none,
+                  color: Color(0xff2f5d62).withOpacity(0.77),
+                  fontSize: 30.0.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: 10.0.h,
+              ),
+              Text(
+                "사용하실 기능을 선택해주세요",
+                style: TextStyle(
+                  //fontFamily: 'normal',
+                  decoration: TextDecoration.none,
+                  color: Color(0xff2f5d62),
+                  fontSize: 40.0.sp,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2.h,
+                ),
+              ),
+              SizedBox(
+                height: 100.h,
+              ),
+              Expanded(
+                child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40.0),
+                        topRight: Radius.circular(40.0),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 540.h,
+                          child: GridView(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24.0.w, vertical: 24.0.h),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 1,
+                                crossAxisSpacing: 24.0.h,
+                                mainAxisSpacing: 24.0.h,
+                              ),
+                              children: <Widget>[
+                                optionBox(options[0], Colors.green.shade300),
+                                optionBox(options[1], Colors.yellow.shade300),
+                                optionBox(options[2], Colors.orange.shade300),
+                                optionBox(options[3], Colors.red.shade300),
+                              ]),
+                        ),
+                        Flexible(
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Image.asset(
+                              'assets/age_rating_image/sum.png',
+                              width: 150.w,
+                              height: 150.h,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
     );

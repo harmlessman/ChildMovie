@@ -37,11 +37,10 @@ class _MovieInfoPageState extends State<MovieInfoPage> {
                       child: getRatingImage(widget.movie.gradeName,
                           width: 200.w, height: 200.h)),
                   SizedBox(
-                    width: 40.w,
+                    width: 20.w,
                   ),
                   Container(
-                    width: size.width - 224.w,
-                    height: 220.h,
+                    width: size.width - 220.w,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,

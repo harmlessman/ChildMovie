@@ -51,7 +51,10 @@ class _SettingPageState extends State<SettingPage> {
           ListTile(
               title: Text('튜토리얼 다시보기'),
               subtitle: Text('앱 처음 실행 시 나오는 설명 페이지를 엽니다'),
-              onTap: () {}),
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/onboarding', (route) => false);
+              }),
           Container(
             color: Colors.grey.withOpacity(0.2),
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:child_movie/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +27,9 @@ void main() async{
 
   // SettingManager에 SharedPreferences instance 미리 생성
   await SettingManager.getSharedPreferencesInstance();
+  //SettingManager.prefs.clear();
+  // 앱 최초 실행 시 초기 값 세팅 (SharedPreferences)
+  await SettingManager.setInitialValues();
 
   // 앱 초기화
   await Firebase.initializeApp(
@@ -41,6 +45,15 @@ void main() async{
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  // 첫 실행이면 onboarding 페이지로 이동하고, firstRun 값을 false로 변경
+  String getInitialRoute(){
+    if (SettingManager.prefs.getBool('firstRun')!){
+      SettingManager.prefs.setBool('firstRun', false);
+      return '/onboarding';
+    }
+    return '/';
+  }
 
   // This widget is the root of your application.
   @override
@@ -65,13 +78,14 @@ class MyApp extends StatelessWidget {
                   fontFamily: 'maple',
                 ),
                 debugShowCheckedModeBanner: false,
-                initialRoute: '/',
+                initialRoute: getInitialRoute(),
                 routes: {
                   '/': (context) => HomePage(),
                   '/search': (context) => SearchPage(),
                   '/detail_search': (context) => DetailSearchPage(),
                   '/rating_info': (context) => MovieRatingInfoPage(),
                   '/update': (context) => UpdatePage(),
+                  '/onboarding' : (context) => OnboardingPage(),
                 });
           }),
     );

@@ -130,16 +130,23 @@ class MovieDatabase{
     return movie;
   }
 
-  Future<List<Movie>> getMovieFromTitle(String word) async{
+  Future<List<Movie>> getMovieFromTitle(String word, bool block18) async{
     List<Movie> searchResult = [];
-
+    List<Map<String, dynamic>> maps;
     // List<Map<String, dynamic>> maps = await db.query(
     //   TABLE_NAME,
     //   columns: ['id', 'aplcName', 'coreHarmRsn', 'descriptive_content', 'direName', 'direNatnlName', 'gradeName', 'leadaName', 'mvAssoName', 'oriTitle', 'prodYear', 'prodcName', 'prodcNatnlName', 'rtDate', 'rtNo', 'rtStdName1', 'rtStdName2', 'rtStdName3', 'rtStdName4', 'rtStdName5', 'rtStdName6', 'rtStdName7', 'screTime', 'stadCont', 'suppaName', 'useTitle', 'workCont', 'rtCoreHarmRsnNm'],
     //   where: 'oriTitle LIKE ? OR useTitle LIKE ?',
     //   whereArgs: ['%$word%'],
     // );
-    List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM $TABLE_NAME WHERE oriTitle LIKE \'%$word%\' OR useTitle LIKE \'%$word%\'');
+    if (block18){
+      maps = await db.rawQuery('SELECT * FROM $TABLE_NAME WHERE (oriTitle LIKE \'%$word%\' OR useTitle LIKE \'%$word%\') AND gradeName != \'청소년관람불가\'');
+
+    }
+    else{
+      maps = await db.rawQuery('SELECT * FROM $TABLE_NAME WHERE oriTitle LIKE \'%$word%\' OR useTitle LIKE \'%$word%\'');
+
+    }
 
     for (int i = 0; i < maps.length; i++) {
       searchResult.add(Movie.fromJson(maps[i]));

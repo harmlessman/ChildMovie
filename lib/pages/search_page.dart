@@ -1,7 +1,10 @@
+import 'package:child_movie/setting/setting_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:child_movie/db/movie_database.dart';
 import 'package:child_movie/utils/preview_movies.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -33,11 +36,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    SettingManager settingManager = Provider.of<SettingManager>(context);
     Widget resultWidget(int state){
       switch (state){
       // 검색 중일 때
         case -1:
-          return Center(child: CircularProgressIndicator(),);
+          return Lottie.asset('assets/age_rating_image/load.json');
       // 결과가 없을 때
         case 0:
           return Column(
@@ -130,7 +134,7 @@ class _SearchPageState extends State<SearchPage> {
                           resultState = -1;
                         });
 
-                        var data = await db.getMovieFromTitle(v);
+                        var data = await db.getMovieFromTitle(v, settingManager.getBlock18);
 
                         setState(() {
                           searchResult = makePreviewWidgets(data, context);

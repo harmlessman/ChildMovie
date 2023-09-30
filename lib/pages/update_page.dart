@@ -333,7 +333,7 @@ class _UpdatePageState extends State<UpdatePage> {
                           child: Column(
                             children: [
                               Text(
-                                "현재 업데이트 : ${snapshot.data.year}-${snapshot.data.month.toString().padLeft(2, '0')}",
+                                "현재 업데이트\n${snapshot.data.year}-${snapshot.data.month.toString().padLeft(2, '0')}-${snapshot.data.day.toString().padLeft(2, '0')}",
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
                                   fontSize: 30.0.sp,
@@ -342,7 +342,7 @@ class _UpdatePageState extends State<UpdatePage> {
                               ),
                               SizedBox(height: 24.h,),
                               Text(
-                                "최신 업데이트 : ${updateDate.year}-${updateDate.month.toString().padLeft(2, '0')}",
+                                "최신 업데이트\n${updateDate.year}-${updateDate.month.toString().padLeft(2, '0')}-${updateDate.day.toString().padLeft(2, '0')}",
                                 style: TextStyle(
                                   decoration: TextDecoration.none,
                                   fontSize: 30.0.sp,

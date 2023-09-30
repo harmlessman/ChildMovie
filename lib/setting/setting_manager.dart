@@ -39,7 +39,7 @@ class SettingManager with ChangeNotifier {
       // 업데이트를 통해 값 변경됨
       prefs.setInt('updatedYear', int.parse(jsonData['initialDataDate'].split('-')[0]));
       prefs.setInt('updatedMonth', int.parse(jsonData['initialDataDate'].split('-')[1]));
-
+      prefs.setInt('updatedDay', int.parse(jsonData['initialDataDate'].split('-')[2]));
 
     }
 

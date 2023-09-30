@@ -53,45 +53,36 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget optionBox(Map<String, dynamic> option, Color color) {
-    return GestureDetector(
-      onTap: () {
+    return ElevatedButton(
+      onPressed: () {
         setState(() {});
         Navigator.pushNamed(context, '/${option['key']}');
       },
-      child: Container(
-        // width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(15.0),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 7,
-                blurRadius: 10,
-                offset: Offset(0, 10)),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            option['icon'],
-            SizedBox(
-              height: 20.0.h,
-            ),
-            Text(
-              option['name'],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  //fontFamily: 'normal',
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 25.0.sp,
-                  color: Colors.black),
-            )
-          ],
-        ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor:color,
+        shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
+        elevation:10,
+
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          option['icon'],
+          SizedBox(
+            height: 20.0.h,
+          ),
+          Text(
+            option['name'],
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                //fontFamily: 'normal',
+                decoration: TextDecoration.none,
+                fontWeight: FontWeight.w500,
+                fontSize: 25.0.sp,
+                color: Colors.black),
+          )
+        ],
       ),
     );
   }
@@ -258,40 +249,28 @@ class _HomePageState extends State<HomePage> {
                         topRight: Radius.circular(40.0),
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 540.h,
-                          child: GridView(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24.0.w, vertical: 24.0.h),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 1,
-                                crossAxisSpacing: 24.0.h,
-                                mainAxisSpacing: 24.0.h,
-                              ),
-                              children: <Widget>[
-                                optionBox(options[0], Colors.green.shade300),
-                                optionBox(options[1], Colors.yellow.shade300),
-                                optionBox(options[2], Colors.orange.shade300),
-                                optionBox(options[3], Colors.red.shade300),
-                              ]),
+                    child: GridView(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 24.0.w, vertical: 24.0.h),
+                        gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 1,
+                          crossAxisSpacing: 24.0.h,
+                          mainAxisSpacing: 24.0.h,
                         ),
-                        Flexible(
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Image.asset(
-                              'assets/age_rating_image/sum.png',
-                              width: 150.w,
-                              height: 150.h,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
+                        children: <Widget>[
+                          optionBox(options[0], Colors.green.shade300),
+                          optionBox(options[1], Colors.yellow.shade300),
+                          optionBox(options[2], Colors.orange.shade300),
+                          optionBox(options[3], Colors.red.shade300),
+                        ])),
               ),
+
+              // Container(decoration: BoxDecoration(color: Colors.blueGrey),child:SizedBox(
+              //   height: 80.h,
+              // ))
+
             ],
           ),
         ),

@@ -59,7 +59,10 @@ class _MovieInfoPageState extends State<MovieInfoPage> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        Row(
+                        Wrap(
+                          spacing: 10.w,
+                          runSpacing: 10.h,
+                          direction: Axis.horizontal,
                           children: getCoreHarmImageList(
                               widget.movie.coreHarmRsn,
                               widget.movie.rtCoreHarmRsnNm,
@@ -153,19 +156,37 @@ class _MovieInfoPageState extends State<MovieInfoPage> {
                       // 최댓값 5 보장
                       RadarDataSet(
                         fillColor: Colors.white.withOpacity(0),
-                        borderColor: Colors.white.withOpacity(0),
+                        borderColor: Colors.black.withOpacity(0),
                         borderWidth: 2,
                         entryRadius: 1,
                         dataEntries: [
-                          RadarEntry(value: 5),
-                          RadarEntry(value: 5),
-                          RadarEntry(value: 5),
-                          RadarEntry(value: 5),
-                          RadarEntry(value: 5),
-                          RadarEntry(value: 5),
-                          RadarEntry(value: 5),
+                          RadarEntry(value: 5.0),
+                          RadarEntry(value: 5.0),
+                          RadarEntry(value: 5.0),
+                          RadarEntry(value: 5.0),
+                          RadarEntry(value: 5.0),
+                          RadarEntry(value: 5.0),
+                          RadarEntry(value: 5.0),
                         ],
                       ),
+
+                      // 최솟값 1 보장
+                      RadarDataSet(
+                        fillColor: Colors.white.withOpacity(0),
+                        borderColor: Colors.black.withOpacity(0),
+                        borderWidth: 2,
+                        entryRadius: 1,
+                        dataEntries: [
+                          RadarEntry(value: 1.0),
+                          RadarEntry(value: 1.0),
+                          RadarEntry(value: 1.0),
+                          RadarEntry(value: 1.0),
+                          RadarEntry(value: 1.0),
+                          RadarEntry(value: 1.0),
+                          RadarEntry(value: 1.0),
+                        ],
+                      ),
+
                     ],
                     radarBackgroundColor: Colors.transparent,
                     borderData: FlBorderData(show: false),
@@ -218,11 +239,13 @@ class _MovieInfoPageState extends State<MovieInfoPage> {
                     },
                     ///////////////////////
 
-                    tickCount: 1,
+
+                    // 구분선 개수
+                    tickCount: 4,
                     ticksTextStyle:
-                        TextStyle(color: Colors.transparent, fontSize: 10.sp),
+                        TextStyle(color: Colors.black, fontSize: 10.sp),
                     // 안에들어있는 최솟값 선
-                    tickBorderData: const BorderSide(color: Colors.transparent),
+                    tickBorderData: BorderSide(color: Colors.black.withOpacity(0.2)),
 
                     // 중심에서 각으로 뻗는 선
                     gridBorderData: BorderSide(

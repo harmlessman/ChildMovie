@@ -294,9 +294,7 @@ class _UpdatePageState extends State<UpdatePage> {
                           // container안의 edge
                           padding: EdgeInsets.symmetric(
                               horizontal: 24.0.w, vertical: 24.0.h),
-                          // container밖의 edge
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 24.0.w, vertical: 24.0.h),
+
                           child: Text("최신 상태 : $isLasted",
                               style: TextStyle(
                                 decoration: TextDecoration.none,
@@ -305,6 +303,7 @@ class _UpdatePageState extends State<UpdatePage> {
                               ),
                               textAlign: TextAlign.center),
                         ),
+                        SizedBox(height: 24.h,),
                         Container(
                           width: 400.w,
                           decoration: BoxDecoration(
@@ -330,8 +329,7 @@ class _UpdatePageState extends State<UpdatePage> {
                           ),
                           padding: EdgeInsets.symmetric(
                               horizontal: 24.0.w, vertical: 24.0.h),
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 24.0.w, vertical: 24.0.h),
+
                           child: Column(
                             children: [
                               Text(
@@ -351,14 +349,6 @@ class _UpdatePageState extends State<UpdatePage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              // Text(
-                              //   "앱 버전 : ${SettingManager.prefs.getString('version')}",
-                              //   style: TextStyle(
-                              //     decoration: TextDecoration.none,
-                              //     fontSize: 30.0.sp,
-                              //     fontWeight: FontWeight.bold,
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
@@ -368,40 +358,45 @@ class _UpdatePageState extends State<UpdatePage> {
 
                   return child;
                 }),
-            ElevatedButton(
-              onPressed: () async {
-                // 현재 업데이트와 최신업데이트 날짜가 같으면 업데이트 할 필요가 없으므로
-                if (isLasted) {
-                  isLastedDialog();
-                }
-                // 업데이트 진행
-                else {
-                  if (!(await isInternetConnected())){
-                    internetConnectionErrorDialog();
+            SizedBox(height: 48.h,),
+            SizedBox(
+              height:75.h,
+              width: 300.w,
+              child: ElevatedButton(
+                onPressed: () async {
+                  // 현재 업데이트와 최신업데이트 날짜가 같으면 업데이트 할 필요가 없으므로
+                  if (isLasted) {
+                    isLastedDialog();
                   }
-                  else{
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UpdateLoadingPage()),
-                    );
-                    var downloadedDataNum = await updateMovieInfo();
+                  // 업데이트 진행
+                  else {
+                    if (!(await isInternetConnected())){
+                      internetConnectionErrorDialog();
+                    }
+                    else{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UpdateLoadingPage()),
+                      );
+                      var downloadedDataNum = await updateMovieInfo();
 
-                    Navigator.pop(context);
-                    doneDialog(downloadedDataNum);
+                      Navigator.pop(context);
+                      doneDialog(downloadedDataNum);
+                    }
                   }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                  shape: StadiumBorder(),
-                  fixedSize: Size(300.w, 75.h),
-                  backgroundColor: Colors.green),
-              child: Text(
-                'Update',
-                style: TextStyle(
-                  decoration: TextDecoration.none,
-                  fontSize: 30.0.sp,
-                  fontWeight: FontWeight.bold,
+                },
+                style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    //fixedSize: Size(300.w, 75.h),
+                    backgroundColor: Colors.green),
+                child: Text(
+                  'Update',
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    fontSize: 30.0.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),

@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:child_movie/pages/update_loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:child_movie/db/update.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:lottie/lottie.dart';
 
 class UpdatePage extends StatefulWidget {
   const UpdatePage({super.key});
@@ -16,29 +15,6 @@ class UpdatePage extends StatefulWidget {
 class _UpdatePageState extends State<UpdatePage> {
   DateTime updateDate = getUpdateDate();
   late bool isLasted; // 최신 버전인지 아닌지
-  Alignment align = Alignment.center; // db이미지 align
-  Curve curve = Curves.bounceOut; // db이미지 curve
-  late Timer timer; // image animation timer
-
-  // 페이지 열 때 호출
-  @override
-  void initState() {
-    timer = Timer.periodic(const Duration(seconds: 2), (t) {
-      setState(() {
-        align =
-        align == Alignment.center ? Alignment.topCenter : Alignment.center;
-        curve = curve == Curves.bounceOut ? Curves.linear : Curves.bounceOut;
-      });
-    });
-    super.initState();
-  }
-
-  // 닫을 때 호출
-  @override
-  void dispose() {
-    timer.cancel(); // timer 해제
-    super.dispose();
-  }
 
   isInternetConnected() async{
     var connectivityResult = await Connectivity().checkConnectivity();
@@ -146,16 +122,6 @@ class _UpdatePageState extends State<UpdatePage> {
                 ],
               ),
             ),
-            // actions: <Widget>[
-            //   ElevatedButton(
-            //     //style: ,
-            //     child: const Text('닫기'),
-            //
-            //     onPressed: () {
-            //       Navigator.of(context).pop();
-            //     },
-            //   ),
-            // ],
           );
         },
       );
@@ -213,195 +179,180 @@ class _UpdatePageState extends State<UpdatePage> {
       );
     }
 
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              'assets/age_rating_image/9.jpg',
-            ),
-            fit: BoxFit.cover,
-          )),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent, //투명
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: Colors.black),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // db이미지
-            FittedBox(
-              child: SizedBox(
-                width: 540.w,
-                height: 450.h,
-                child: AnimatedAlign(
-                  alignment: align,
-                  duration: Duration(seconds: 2),
-                  curve: curve,
-                  child: Image.asset(
-                    'assets/age_rating_image/db.png',
-                    width: 400.h,
-                    height: 400.w,
-                  ),
-                ),
-              ),
-            ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // 현재 업데이트, 최신 업데이트를 가져와서 build
+          // 최신상태여부, 업데이트날짜, 업데이트버튼
+          FutureBuilder(
+              future: getLastUpdatedDate(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                Widget child;
 
-            // 현재 업데이트, 최신 업데이트를 가져와서 build
-            // 최신상태여부, 업데이트날짜, 업데이트버튼
-            FutureBuilder(
-                future: getLastUpdatedDate(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  Widget child;
+                if (snapshot.hasData == false) {
+                  child = CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  child = CircularProgressIndicator();
+                } else {
+                  isLasted =
+                  updateDate.compareTo(snapshot.data) == 0 ? true : false;
 
-                  if (snapshot.hasData == false) {
-                    child = CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    child = CircularProgressIndicator();
-                  } else {
-                    isLasted =
-                    updateDate.compareTo(snapshot.data) == 0 ? true : false;
+                  child = Column(
+                    children: [
+                      FittedBox(
+                        child: SizedBox(
+                          width: 540.w,
+                          height: 450.h,
+                          child: isLasted == true
+                              ? Lottie.asset('assets/lottie_files/cube_blue.json')
+                              : Lottie.asset('assets/lottie_files/cube_red.json')
+                        ),
+                      ),
 
-                    child = Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          width: 400.w,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              isLasted == true
-                                  ? Colors.green.shade300
-                                  : Colors.red.shade300,
-                              Colors.white
-                            ], stops: [
-                              0.5,
-                              1
-                            ]),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 8,
-                                  offset: Offset(0, 5)),
-                            ],
+                      SizedBox(height: 50.h,),
+                      Container(
+                        alignment: Alignment.center,
+                        width: 400.w,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                            isLasted == true
+                                ? Colors.green.shade300
+                                : Colors.red.shade300,
+                            Colors.white
+                          ], stops: [
+                            0.5,
+                            1
+                          ]),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
                           ),
-                          // container안의 edge
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24.0.w, vertical: 24.0.h),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 8,
+                                offset: Offset(0, 5)),
+                          ],
+                        ),
+                        // container안의 edge
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 24.0.w, vertical: 24.0.h),
 
-                          child: Text("최신 상태 : $isLasted",
+                        child: Text("최신 상태 : $isLasted",
+                            style: TextStyle(
+                              decoration: TextDecoration.none,
+                              fontSize: 30.0.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center),
+                      ),
+                      SizedBox(height: 24.h,),
+                      Container(
+                        width: 400.w,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                            isLasted == true
+                                ? Colors.green.shade300
+                                : Colors.red.shade300,
+                            Colors.white
+                          ], stops: [
+                            0.5,
+                            1
+                          ]),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 10,
+                                offset: Offset(0, 5)),
+                          ],
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 24.0.w, vertical: 24.0.h),
+
+                        child: Column(
+                          children: [
+                            Text(
+                              "현재 업데이트\n${snapshot.data.year}-${snapshot.data.month.toString().padLeft(2, '0')}-${snapshot.data.day.toString().padLeft(2, '0')}",
                               style: TextStyle(
                                 decoration: TextDecoration.none,
                                 fontSize: 30.0.sp,
                                 fontWeight: FontWeight.bold,
                               ),
-                              textAlign: TextAlign.center),
-                        ),
-                        SizedBox(height: 24.h,),
-                        Container(
-                          width: 400.w,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              isLasted == true
-                                  ? Colors.green.shade300
-                                  : Colors.red.shade300,
-                              Colors.white
-                            ], stops: [
-                              0.5,
-                              1
-                            ]),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(20.0),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 5)),
-                            ],
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24.0.w, vertical: 24.0.h),
-
-                          child: Column(
-                            children: [
-                              Text(
-                                "현재 업데이트\n${snapshot.data.year}-${snapshot.data.month.toString().padLeft(2, '0')}-${snapshot.data.day.toString().padLeft(2, '0')}",
-                                style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontSize: 30.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            SizedBox(height: 24.h,),
+                            Text(
+                              "최신 업데이트\n${updateDate.year}-${updateDate.month.toString().padLeft(2, '0')}-${updateDate.day.toString().padLeft(2, '0')}",
+                              style: TextStyle(
+                                decoration: TextDecoration.none,
+                                fontSize: 30.0.sp,
+                                fontWeight: FontWeight.bold,
                               ),
-                              SizedBox(height: 24.h,),
-                              Text(
-                                "최신 업데이트\n${updateDate.year}-${updateDate.month.toString().padLeft(2, '0')}-${updateDate.day.toString().padLeft(2, '0')}",
-                                style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontSize: 30.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
+                    ],
+                  );
+                }
+
+                return child;
+              }),
+          SizedBox(height: 48.h,),
+          SizedBox(
+            height:75.h,
+            width: 300.w,
+            child: ElevatedButton(
+              onPressed: () async {
+                // 현재 업데이트와 최신업데이트 날짜가 같으면 업데이트 할 필요가 없으므로
+                if (isLasted) {
+                  isLastedDialog();
+                }
+                // 업데이트 진행
+                else {
+                  if (!(await isInternetConnected())){
+                    internetConnectionErrorDialog();
+                  }
+                  else{
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UpdateLoadingPage()),
                     );
-                  }
+                    var downloadedDataNum = await updateMovieInfo();
 
-                  return child;
-                }),
-            SizedBox(height: 48.h,),
-            SizedBox(
-              height:75.h,
-              width: 300.w,
-              child: ElevatedButton(
-                onPressed: () async {
-                  // 현재 업데이트와 최신업데이트 날짜가 같으면 업데이트 할 필요가 없으므로
-                  if (isLasted) {
-                    isLastedDialog();
+                    Navigator.pop(context);
+                    setState(() {});
+                    doneDialog(downloadedDataNum);
                   }
-                  // 업데이트 진행
-                  else {
-                    if (!(await isInternetConnected())){
-                      internetConnectionErrorDialog();
-                    }
-                    else{
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const UpdateLoadingPage()),
-                      );
-                      var downloadedDataNum = await updateMovieInfo();
-
-                      Navigator.pop(context);
-                      doneDialog(downloadedDataNum);
-                    }
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    //fixedSize: Size(300.w, 75.h),
-                    backgroundColor: Colors.green),
-                child: Text(
-                  'Update',
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    fontSize: 30.0.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  //fixedSize: Size(300.w, 75.h),
+                  backgroundColor: Colors.green),
+              child: Text(
+                'Update',
+                style: TextStyle(
+                  decoration: TextDecoration.none,
+                  fontSize: 30.0.sp,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

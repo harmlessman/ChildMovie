@@ -9,6 +9,7 @@ import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:child_movie/setting/setting_manager.dart';
 import 'pages/detail_search_page.dart';
@@ -35,6 +36,9 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // 모바일 광고 sdk 초기화
+  MobileAds.instance.initialize();
 
   // 앱 시작
   runApp(const MyApp());

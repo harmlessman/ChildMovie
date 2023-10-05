@@ -1,3 +1,4 @@
+import 'package:child_movie/google_admob/google_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:child_movie/setting/setting_pages/setting_page.dart';
 import 'package:flutter/services.dart';
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       'key': 'update',
     },
   ];
-
+  late Widget bannerAd;
 
   Widget optionBox(Map<String, dynamic> option, Color color) {
     return ElevatedButton(
@@ -155,6 +156,31 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
+    );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    bannerAd = FutureBuilder(
+        future: AdMob.loadBannerAd(context),
+        builder: (context, snapshot){
+          if (snapshot.hasData == false) {
+            return Container();
+          } else if (snapshot.hasError) {
+            return Container();
+          } else {
+            return AdMob.showBannerAd();
+          }
+        }
+
     );
   }
 
@@ -266,10 +292,7 @@ class _HomePageState extends State<HomePage> {
                           optionBox(options[3], Colors.red.shade300),
                         ])),
               ),
-
-              // Container(decoration: BoxDecoration(color: Colors.blueGrey),child:SizedBox(
-              //   height: 80.h,
-              // ))
+              bannerAd,
 
             ],
           ),

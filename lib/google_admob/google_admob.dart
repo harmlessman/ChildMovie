@@ -8,8 +8,16 @@ class AdMob {
   static final bannerAdUnitId = Platform.isAndroid
       ? 'ca-app-pub-3940256099942544/6300978111'
       : 'ca-app-pub-3940256099942544/2934735716';
-  
+
+  // test rewardAdUnitId
+  static final rewardAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/5224354917'
+      : 'ca-app-pub-3940256099942544/1712485313';
+
+
   static BannerAd? anchoredAdaptiveAd;
+
+  static RewardedAd? rewardedAd;
 
   static Future<BannerAd?> loadBannerAd(BuildContext context) async {
     //Get an AnchoredAdaptiveBannerAdSize before loading the ad.
@@ -54,4 +62,24 @@ class AdMob {
     return ad;
   }
 
+  static void loadRewardAd() {
+    RewardedAd.load(
+        adUnitId: rewardAdUnitId,
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          // Called when an ad is successfully received.
+          onAdLoaded: (ad) {
+            debugPrint('$ad loaded.');
+            // Keep a reference to the ad so you can show it later.
+            rewardedAd = ad;
+            //ad.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {  });
+          },
+
+          // Called when an ad request failed.
+          onAdFailedToLoad: (LoadAdError error) {
+            debugPrint('RewardedAd failed to load: $error');
+          },
+        ));
+
+  }
 }

@@ -1,8 +1,10 @@
 import 'package:child_movie/pages/update_loading_page.dart';
+import 'package:child_movie/google_admob/google_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:child_movie/db/update.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 
 class UpdatePage extends StatefulWidget {
@@ -315,28 +317,59 @@ class _UpdatePageState extends State<UpdatePage> {
             width: 300.w,
             child: ElevatedButton(
               onPressed: () async {
-                // 현재 업데이트와 최신업데이트 날짜가 같으면 업데이트 할 필요가 없으므로
-                if (isLasted) {
-                  isLastedDialog();
-                }
-                // 업데이트 진행
-                else {
-                  if (!(await isInternetConnected())){
-                    internetConnectionErrorDialog();
-                  }
-                  else{
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UpdateLoadingPage()),
-                    );
-                    var downloadedDataNum = await updateMovieInfo();
+                // 버튼을 누르면 광고가 실행됨. 광고를 다 보면 업데이트가 진행함
+                AdMob.rewardedAd?.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) async{
+                  // 다시 누를 수도 있으니 리워드 광고를 다시 load
+                  // 처음 load는 main.dart 에서 진행함
+                  AdMob.loadRewardAd();
 
-                    Navigator.pop(context);
-                    setState(() {});
-                    doneDialog(downloadedDataNum);
+                  // 현재 업데이트와 최신업데이트 날짜가 같으면 업데이트 할 필요가 없으므로
+                  if (isLasted) {
+                    isLastedDialog();
                   }
-                }
+                  // 업데이트 진행
+                  else {
+                    if (!(await isInternetConnected())){
+                      internetConnectionErrorDialog();
+                    }
+                    else{
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UpdateLoadingPage()),
+                      );
+                      var downloadedDataNum = await updateMovieInfo();
+
+                      Navigator.pop(context);
+                      setState(() {});
+                      doneDialog(downloadedDataNum);
+                    }
+                  }
+
+                });
+                // // 현재 업데이트와 최신업데이트 날짜가 같으면 업데이트 할 필요가 없으므로
+                // if (isLasted) {
+                //   isLastedDialog();
+                // }
+                // // 업데이트 진행
+                // else {
+                //   if (!(await isInternetConnected())){
+                //     internetConnectionErrorDialog();
+                //   }
+                //   else{
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => const UpdateLoadingPage()),
+                //     );
+                //     var downloadedDataNum = await updateMovieInfo();
+                //
+                //     Navigator.pop(context);
+                //     setState(() {});
+                //     doneDialog(downloadedDataNum);
+                //   }
+                // }
+
               },
               style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),

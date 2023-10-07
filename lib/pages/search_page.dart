@@ -41,7 +41,7 @@ class _SearchPageState extends State<SearchPage> {
       switch (state){
       // 검색 중일 때
         case -1:
-          return Lottie.asset('assets/age_rating_image/load.json');
+          return Lottie.asset('assets/lottie_files/search.json');
       // 결과가 없을 때
         case 0:
           return Column(

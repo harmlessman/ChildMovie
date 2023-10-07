@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:child_movie/setting/setting_pages/setting_page.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -100,13 +100,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-
-                // AdWidget로 변경예정
-                Lottie.asset(
-                    'assets/age_rating_image/ads.json',
-                  height: 500.h,
-                  width: 500.w,
-                ),
+                AdMob.showExitAd(),
                 SizedBox(height: 30.h,),
                 Text(
                   '앱을 종료하시겠습니까?',
@@ -163,6 +157,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // 광고 load
+    AdMob.loadExitAd(400.w.toInt(), 400.h.toInt());
+    AdMob.loadRewardAd();
   }
 
   @override

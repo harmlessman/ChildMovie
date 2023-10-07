@@ -14,10 +14,17 @@ class AdMob {
       ? 'ca-app-pub-3940256099942544/5224354917'
       : 'ca-app-pub-3940256099942544/1712485313';
 
+  // test exitAdUnitId
+  static final exitAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
 
   static BannerAd? anchoredAdaptiveAd;
 
   static RewardedAd? rewardedAd;
+
+  static BannerAd? exitAd;
 
   static Future<BannerAd?> loadBannerAd(BuildContext context) async {
     //Get an AnchoredAdaptiveBannerAdSize before loading the ad.
@@ -81,5 +88,34 @@ class AdMob {
           },
         ));
 
+  }
+
+  static void loadExitAd(int width, int height){
+    exitAd = BannerAd(
+      adUnitId: exitAdUnitId,
+      request: const AdRequest(),
+      size:  AdSize(width: width, height: height),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          print('$ad loaded: ${ad.responseInfo}');
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          print('Anchored adaptive banner failedToLoad: $error');
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
+  static Widget showExitAd(){
+    print('############################');
+    print(exitAd!.size.width.toDouble());
+    print(exitAd!.size.height.toDouble());
+    Widget ad = SizedBox(
+      width: exitAd!.size.width.toDouble(),
+      height: exitAd!.size.height.toDouble(),
+      child: AdWidget(ad: exitAd!),
+    );
+    return ad;
   }
 }

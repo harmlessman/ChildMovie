@@ -34,7 +34,7 @@ class AdMob {
   }
 
   static Future<BannerAd?> loadBannerAd(BuildContext context) async {
-    //Get an AnchoredAdaptiveBannerAdSize before loading the ad.
+    // 앵커형 배너 사이즈
     AnchoredAdaptiveBannerAdSize? size =
         await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
             MediaQuery.of(context).size.width.truncate());
@@ -45,10 +45,10 @@ class AdMob {
       size: size ?? AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          print('$ad loaded: ${ad.responseInfo}');
+          print('$ad loaded.');
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Anchored adaptive banner failedToLoad: $error');
+          print('$ad failed.');
           ad.dispose();
         },
       ),
@@ -81,15 +81,12 @@ class AdMob {
         adUnitId: rewardAdUnitId,
         request: const AdRequest(),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
-          // Called when an ad is successfully received.
           onAdLoaded: (ad) {
-            debugPrint('$ad loaded.');
-            // Keep a reference to the ad so you can show it later.
-            rewardedAd = ad;
-            //ad.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {  });
-          },
+            print('$ad loaded.');
 
-          // Called when an ad request failed.
+            // rewardedAd.show() 함수를 통해 보상형 광고 보여줌 (update.dart에 구현)
+            rewardedAd = ad;
+          },
           onAdFailedToLoad: (LoadAdError error) {
             debugPrint('RewardedAd failed to load: $error');
           },
@@ -104,10 +101,10 @@ class AdMob {
       size:  AdSize(width: width, height: height),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          print('$ad loaded: ${ad.responseInfo}');
+          print('$ad loaded.');
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Anchored adaptive banner failedToLoad: $error');
+          print('$ad failed.');
           ad.dispose();
         },
       ),
@@ -115,9 +112,6 @@ class AdMob {
   }
 
   static Widget showExitAd(){
-    print('############################');
-    print(exitAd!.size.width.toDouble());
-    print(exitAd!.size.height.toDouble());
     Widget ad = SizedBox(
       width: exitAd!.size.width.toDouble(),
       height: exitAd!.size.height.toDouble(),

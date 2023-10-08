@@ -16,6 +16,7 @@ import 'pages/detail_search_page.dart';
 import 'pages/search_page.dart';
 import 'pages/movie_rating_info.dart';
 import 'pages/update_page.dart';
+import 'package:child_movie/google_admob/google_admob.dart';
 
 void main() async{
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,9 @@ void main() async{
 
   // 모바일 광고 sdk 초기화
   MobileAds.instance.initialize();
+
+  // 광고 id setting
+  await AdMob.setAdUnitId();
 
   // 앱 시작
   runApp(const MyApp());

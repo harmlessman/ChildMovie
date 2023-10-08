@@ -1,30 +1,37 @@
-import 'dart:io';
+import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter/material.dart';
 
 class AdMob {
   // test bannerAdUnitId
-  static final bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+  static String bannerAdUnitId='';
 
   // test rewardAdUnitId
-  static final rewardAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/5224354917'
-      : 'ca-app-pub-3940256099942544/1712485313';
+  static String rewardAdUnitId='';
 
   // test exitAdUnitId
-  static final exitAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
-
+  static String exitAdUnitId='';
 
   static BannerAd? anchoredAdaptiveAd;
 
   static RewardedAd? rewardedAd;
 
   static BannerAd? exitAd;
+
+  static Future<void> setAdUnitId() async {
+
+    // app_config 에서 admob id 가져옴
+    String jsonString = await rootBundle.loadString('assets/app_config.json');
+
+    Map<String, dynamic> jsonData = json.decode(jsonString);
+
+    bannerAdUnitId = jsonData["bannerAdUnitId"];
+    rewardAdUnitId = jsonData["rewardAdUnitId"];
+    exitAdUnitId = jsonData["exitAdUnitId"];
+
+  }
 
   static Future<BannerAd?> loadBannerAd(BuildContext context) async {
     //Get an AnchoredAdaptiveBannerAdSize before loading the ad.

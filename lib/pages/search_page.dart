@@ -82,6 +82,7 @@ class _SearchPageState extends State<SearchPage> {
       }
     }
     return Scaffold(
+      backgroundColor:Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,

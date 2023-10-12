@@ -17,6 +17,7 @@ class _AppInfoPageState extends State<AppInfoPage> {
   Widget build(BuildContext context) {
     //SettingManager settingManager = Provider.of<SettingManager>(context);
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,

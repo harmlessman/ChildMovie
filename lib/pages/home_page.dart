@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       'key': 'rating_info',
     },
     {
-      'name': '업데이트\n(개발 중)',
+      'name': '업데이트',
       'icon': Icon(
         Icons.update,
         size: 70.0.h,

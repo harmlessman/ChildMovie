@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lottie/lottie.dart';
+
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -11,22 +11,22 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   final images = [
-    'assets/age_rating_image/m.json',
-    'assets/age_rating_image/load.json',
-    'assets/age_rating_image/loading.json',
-    'assets/age_rating_image/m.json',
+    'assets/onboarding_image/search.png',
+    'assets/onboarding_image/info.png',
+    'assets/onboarding_image/update.png',
+    'assets/onboarding_image/home.png',
   ];
   final titles = [
-    '',
-    '',
-    '',
-    ''
+    '찾고자 하는 영화의 제목을 입력하세요.',
+    '영화의 정보를 확인하세요.',
+    '영화 정보를 업데이트하세요.',
+    '지금 바로 사용하세요.'
   ];
   final descs = [
-    '',
-    '',
-    '',
-    ''
+    '앱 내부 DB에서 영화를 검색합니다.',
+    '관람 등급, 줄거리, 서술적 묘사 등 영화의 세부 정보를 확인할 수 있습니다.',
+    '업데이트 버튼을 누르면 DB를 업데이트합니다.',
+    '시작하기를 눌러주세요.'
   ];
 
   final pageController = PageController();
@@ -40,6 +40,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
         return false;
       },
       child: Scaffold(
+        backgroundColor:Colors.white,
         body: Column(
           children: [
             // 사진, 텍스트, 텍스트
@@ -52,9 +53,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 400.h,
-                      width: 400.w,
-                      child: Lottie.asset(images[index]),
+                      height: 700.h,
+                      width: 500.w,
+                      child: Image.asset(images[index]),
                     ),
                     SizedBox(
                       height: 48.h,

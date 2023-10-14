@@ -27,10 +27,10 @@ Future<void> setLastUpdatedDate(int year, int month, int day) async {
 }
 
 /// Firebase의 가장 최근 업데이트 날짜를 계산
-/// 당일 기준 7일 전 데이터가 가장 최신 데이터
+/// 당일 기준 7일 전 데이터가 가장 최신 데이터이지만, 23시에 업데이트하므로 편의상 8일전 데이터를 최신 데이터로 간주함
 DateTime getUpdateDate() {
   DateTime now = DateTime.now();
-  DateTime updateDate = DateTime(now.year, now.month, now.day - 7);
+  DateTime updateDate = DateTime(now.year, now.month, now.day - 8);
   return updateDate;
 }
 

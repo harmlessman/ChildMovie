@@ -3,8 +3,6 @@ import 'package:child_movie/db/movie.dart';
 import 'package:child_movie/pages/movie_info_page.dart';
 import 'package:child_movie/utils/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// 범죄도시
-// 퍼시픽
 
 List<Widget> makePreviewWidgets(List<Movie> movies, BuildContext context) {
   List<Widget> items = [];

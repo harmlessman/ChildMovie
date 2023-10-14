@@ -43,7 +43,15 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# firebase option
+firebase_options.dart
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
+/ios/firebase_app_id_file.json
+
+
 
 # test code
-lib/ticket_booking.dart
+/test.dart
 assets/
+android/app/src/main/AndroidManifest.xml

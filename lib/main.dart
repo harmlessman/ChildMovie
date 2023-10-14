@@ -45,7 +45,7 @@ void main() async{
   // 앱 시작
   runApp(const MyApp());
 
-  sleep(const Duration(seconds: 1)); //인트로 최소 유지시간 보장
+  sleep(const Duration(milliseconds: 500)); //인트로 최소 유지시간 보장
   FlutterNativeSplash.remove(); //인트로 종료
 }
 

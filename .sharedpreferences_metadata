@@ -1,0 +1,32 @@
+// 앱을 처음 시작하는지 여부 (bool)
+firstRun
+
+// 청소년관람불가 영화 차단 여부 (bool)
+block18
+
+// 최근 업데이트 한 년도 (int)
+updatedYear
+
+// 최근 업데이트 한 월 (int)
+updatedMonth
+
+// 최근 업데이트 한 일 (int)
+updatedDay
+
+--- 아래 데이터는 app_config.json 에서 받아옵니다 ---
+
+// 현재 앱 버전
+version
+
+// 초기 영화 데이터 업데이트 날짜
+initialDataDate
+
+
+
+
+
+
+
+
+
+

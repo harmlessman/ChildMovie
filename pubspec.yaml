@@ -42,7 +42,16 @@ dependencies:
   flutter_screenutil: ^5.8.4
   fl_chart: ^0.63.0
 
+
   flutter_launcher_icons: ^0.13.1
+
+  cloud_firestore: ^4.8.3
+  firebase_core: ^2.15.0
+
+  provider: ^6.0.5
+  connectivity_plus: ^4.0.2
+  lottie: ^2.6.0
+  google_mobile_ads: ^3.0.0
 
 
 dev_dependencies:
@@ -68,8 +77,13 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/age_rating/
-    - assets/contents_rating/
+    - assets/age_rating_image/
+    - assets/contents_rating_image/
+    - assets/fonts/
+    - assets/lottie_files/
+    - assets/onboarding_image/
+    - pubspec.yaml
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -87,10 +101,14 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: normal
+    - family: maple
       fonts:
-        - asset: assets/KNPSKkomi.otf
+        - asset: assets/fonts/Maplestory Light.ttf
+          weight: 300
+        - asset: assets/fonts/Maplestory Bold.ttf
           weight: 700
+
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

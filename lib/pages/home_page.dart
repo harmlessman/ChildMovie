@@ -24,24 +24,6 @@ class _HomePageState extends State<HomePage> {
       'key': 'search',
     },
     {
-      'name': '상세 검색\n(개발 중)',
-      'icon': Icon(
-        Icons.content_paste_search,
-        size: 70.0.h,
-        color: Colors.white,
-      ),
-      'key': 'detail_search',
-    },
-    {
-      'name': '영상 등급 정보\n(개발 중)',
-      'icon': Icon(
-        Icons.movie_filter,
-        size: 70.0.h,
-        color: Colors.white,
-      ),
-      'key': 'rating_info',
-    },
-    {
       'name': '업데이트',
       'icon': Icon(
         Icons.update,
@@ -53,37 +35,43 @@ class _HomePageState extends State<HomePage> {
   ];
   late Widget bannerAd;
 
-  Widget optionBox(Map<String, dynamic> option, Color color) {
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {});
-        Navigator.pushNamed(context, '/${option['key']}');
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor:color,
-        shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
-        elevation:10,
-
+  Widget optionBox(Map<String, dynamic> option, Color firstColor, Color lastColor) {
+    return Container(
+      decoration: BoxDecoration(
+          color:firstColor,
+        borderRadius:BorderRadius.circular(20),
+        gradient: LinearGradient(colors: [
+          firstColor,
+          lastColor,
+          ],
+        ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          option['icon'],
-          SizedBox(
-            height: 20.0.h,
-          ),
-          Text(
-            option['name'],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                //fontFamily: 'normal',
-                decoration: TextDecoration.none,
-                fontWeight: FontWeight.w500,
-                fontSize: 25.0.sp,
-                color: Colors.black),
-          )
-        ],
+      child: MaterialButton(
+        onPressed: () {
+          setState(() {});
+          Navigator.pushNamed(context, '/${option['key']}');
+        },
+        shape: RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            option['icon'],
+            SizedBox(
+              height: 20.0.h,
+            ),
+            Text(
+              option['name'],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  //fontFamily: 'normal',
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 30.0.sp,
+                  color: Colors.black),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -278,16 +266,14 @@ class _HomePageState extends State<HomePage> {
                             horizontal: 24.0.w, vertical: 24.0.h),
                         gridDelegate:
                             SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1,
+                          crossAxisCount: 1,
+                          childAspectRatio: 2,
                           crossAxisSpacing: 24.0.h,
                           mainAxisSpacing: 24.0.h,
                         ),
                         children: <Widget>[
-                          optionBox(options[0], Colors.green.shade300),
-                          optionBox(options[1], Colors.yellow.shade300),
-                          optionBox(options[2], Colors.orange.shade300),
-                          optionBox(options[3], Colors.red.shade300),
+                          optionBox(options[0], Colors.green.shade300,Colors.yellow.shade300),
+                          optionBox(options[1], Colors.orange.shade300,Colors.red.shade300),
                         ])),
               ),
               bannerAd,

@@ -12,9 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:child_movie/setting/setting_manager.dart';
-import 'pages/detail_search_page.dart';
 import 'pages/search_page.dart';
-import 'pages/movie_rating_info.dart';
 import 'pages/update_page.dart';
 import 'package:child_movie/google_admob/google_admob.dart';
 
@@ -90,8 +88,6 @@ class MyApp extends StatelessWidget {
                 routes: {
                   '/': (context) => HomePage(),
                   '/search': (context) => SearchPage(),
-                  '/detail_search': (context) => DetailSearchPage(),
-                  '/rating_info': (context) => MovieRatingInfoPage(),
                   '/update': (context) => UpdatePage(),
                   '/onboarding' : (context) => OnboardingPage(),
                 });
